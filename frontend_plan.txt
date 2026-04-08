@@ -1,0 +1,32 @@
+MASTER PLAN: CATALYST FRONTEND PROTOTYPE (MOBILE-FIRST)
+Target: Membangun web app prototipe berbasis React & Tailwind CSS yang mensimulasikan UI aplikasi mobile Android (mobile-first design), terhubung dengan backend FastAPI yang sudah ada.
+
+Fase 1: Setup Proyek & Konfigurasi Dasar
+Target: Inisiasi React Vite dan Tailwind, serta penyesuaian Backend.
+Instruksi 1.1: Instruksikan saya (user) perintah terminal yang tepat untuk membuat proyek Vite React baru dengan nama "catalyst-app" dan cara menginstal Tailwind CSS. (Jangan tulis kodenya, cukup perintah terminalnya).
+Instruksi 1.2: Arahkan saya untuk memodifikasi file `main.py` di backend FastAPI agar menambahkan middleware CORS (Allow Origins: ["*"]) supaya frontend di port localhost:5173 bisa menembak API di localhost:8000 tanpa diblokir browser.
+Instruksi 1.3: Buat file konfigurasi sentral di frontend `src/config/api.js` untuk menyimpan `BASE_URL = "http://127.0.0.1:8000"`.
+
+Fase 2: Kerangka UI Mobile-First (App Shell)
+Target: Membuat layout dasar yang membatasi lebar layar agar terlihat seperti aplikasi HP di desktop, dan penuh (full-width) saat dibuka di HP sungguhan.
+Instruksi 2.1: Modifikasi `App.jsx` untuk menjadi App Shell. Gunakan class Tailwind `max-w-md mx-auto h-screen bg-gray-100 flex flex-col shadow-lg overflow-hidden` agar layoutnya persis seukuran layar smartphone.
+Instruksi 2.2: Buat komponen navigasi bawah (Bottom Navigation) sederhana di `src/components/BottomNav.jsx` dengan dua tab/menu: "Live Stream" (Aktor A & B) dan "Clipper Dashboard" (Aktor C). Gunakan state di `App.jsx` untuk berpindah antar tab ini.
+
+Fase 3: Pembuatan Tampilan "Live Stream" (Simulasi UMKM & Streamer)
+Target: Layar untuk mensimulasikan event donasi.
+Instruksi 3.1: Buat komponen `src/views/LiveStreamView.jsx`. Buat bagian atasnya berupa kotak hitam (rasio 9:16) sebagai *placeholder* video live streamer.
+Instruksi 3.2: Di bagian bawahnya, buat UI daftar chat palsu yang berjalan.
+Instruksi 3.3: Buat form/tombol "Simulasi Donasi UMKM". Saat form disubmit (mengandung donor_name, amount, dan message dengan keyword UMKM), gunakan `fetch` atau `axios` untuk melakukan HTTP POST ke backend `/api/donations`.
+Instruksi 3.4: Tampilkan notifikasi (alert/toast) dari response backend yang menunjukkan bahwa donasi berhasil dikirim dan sistem AI Catalyst mendeteksi keyword.
+
+Fase 4: Pembuatan Tampilan "Clipper Dashboard" (Aktor C)
+Target: Layar untuk clipper melihat tugas yang masuk dari backend.
+Instruksi 4.1: Buat komponen `src/views/ClipperDashboard.jsx`.
+Instruksi 4.2: Gunakan `useEffect` untuk melakukan HTTP GET ke `/api/clips/queue/1` (asumsi ID clipper adalah 1 sesuai POC backend).
+Instruksi 4.3: Render response JSON menjadi UI "Card" daftar tugas. Setiap Card harus menampilkan `start_timestamp`, `end_timestamp`, dan `ip_license_token` (sebagai bukti legalitas). Gunakan desain Card Tailwind yang rapi dan padat.
+Instruksi 4.4: Beri tombol "Kerjakan" pada Card (untuk prototipe, tombol ini cukup memunculkan alert "Membuka editor video...").
+
+Aturan Ketat untuk Copilot:
+1. Pastikan semua desain menggunakan pendekatan Mobile-First (Tailwind).
+2. Tuliskan kode React secara fungsional menggunakan Hooks.
+3. Kerjakan berdasarkan instruksi fase per fase jika diminta oleh user.

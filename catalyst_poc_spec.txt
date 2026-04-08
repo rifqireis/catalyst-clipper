@@ -1,0 +1,50 @@
+Fase 1: Inisiasi Proyek & Konfigurasi Lingkungan
+Target Utama: Membangun fondasi FastAPI dan koneksi database MySQL.
+
+Instruksi 1.1: Buat file requirements.txt dan definisikan dependensi: fastapi, uvicorn, sqlmodel, pymysql, python-dotenv, dan pydantic.
+
+Instruksi 1.2: Buat file .env di root direktori untuk menyimpan variabel DATABASE_URL dengan format koneksi MySQL standar.
+
+Instruksi 1.3: Buat file app/core/config.py yang menggunakan pydantic-settings untuk memuat variabel dari file .env.
+
+Instruksi 1.4: Buat file app/db/database.py untuk menginisialisasi create_engine SQLModel dan membuat fungsi generator dependency get_session.
+
+Instruksi 1.5: Buat file app/main.py yang berisi inisialisasi instance FastAPI dasar dan lifespan function (atau on_event("startup")) untuk membuat seluruh tabel database saat server pertama kali menyala.
+
+Fase 2: Pembuatan Skema Database (Models)
+Target Utama: Mendefinisikan struktur tabel menggunakan SQLModel.
+
+Instruksi 2.1: Pada app/models/users.py, definisikan class User dengan atribut id, name, role (berisi nilai UMKM, Streamer, atau Clipper), dan is_verified (boolean).
+
+Instruksi 2.2: Pada app/models/donations.py, definisikan class Donation dengan atribut id, donor_name, amount (integer), message (string), dan timestamp (datetime).
+
+Instruksi 2.3: Pada app/models/clips.py, definisikan class ClipTask dengan atribut id, donation_id (foreign key), assigned_clipper_id (foreign key), start_timestamp, end_timestamp, status (pending/completed), dan ip_license_token (string unik).
+
+Fase 3: Pembuatan Logika Bisnis (Services)
+Target Utama: Membangun simulasi deteksi AI dan smart contract.
+
+Instruksi 3.1: Pada app/services/nlp_engine.py, buat fungsi extract_keywords(message: str) -> list[str]. Fungsi ini menggunakan pencarian string sederhana untuk mendeteksi keberadaan kata kunci UMKM (contoh: "umkm", "produk", "beli", "promo").
+
+Instruksi 3.2: Pada app/services/clip_logic.py, buat fungsi calculate_clip_timestamps(event_time: datetime) -> tuple. Logikanya adalah memundurkan waktu 1 menit untuk start_timestamp dan memajukan 2 menit untuk end_timestamp.
+
+Instruksi 3.3: Pada file clip_logic.py yang sama, buat fungsi generate_ip_license() -> str yang menghasilkan token UUID versi 4 acak sebagai simulasi lisensi IP digital.
+
+Fase 4: Pembuatan API Endpoints (Routers)
+Target Utama: Menghubungkan logika internal ke jalur request HTTP.
+
+Instruksi 4.1: Pada app/routers/donations.py, buat endpoint POST /api/donations. Saat menerima payload donasi, simpan ke database, panggil extract_keywords, lalu jika ditemukan kata kunci UMKM, otomatis panggil calculate_clip_timestamps dan generate_ip_license, lalu simpan hasilnya sebagai record baru di tabel ClipTask.
+
+Instruksi 4.2: Pada app/routers/clips.py, buat endpoint GET /api/clips/queue/{clipper_id}. Fungsi ini melakukan query ke database untuk mengambil semua tugas di tabel ClipTask yang berstatus 'pending' untuk ID clipper tersebut.
+
+Instruksi 4.3: Modifikasi app/main.py untuk mengimpor dan mendaftarkan (include_router) router donations dan clips ke aplikasi utama FastAPI.
+
+Fase 5: Skrip Pengujian Simulasi POC
+Target Utama: Skrip otomatis untuk membuktikan workflow dari hulu ke hilir.
+
+Instruksi 5.1: Buat file simulate_catalyst.py di root direktori (di luar folder app).
+
+Instruksi 5.2: Gunakan library requests untuk mengirim HTTP POST dummy ke endpoint /api/donations dengan pesan yang mengandung keyword "Keren banget produk UMKM nya!".
+
+Instruksi 5.3: Lanjutkan skrip dengan mengirim HTTP GET ke /api/clips/queue/{id_clipper} dan cetak response JSON-nya ke terminal dengan rapi untuk membuktikan clipper langsung menerima tugas potong video.
+
+Rencana di atas sudah saya susun dengan alur logika yang sangat disukai oleh Language Model pemrograman. Silakan salin teks tersebut ke dalam satu file .txt.
